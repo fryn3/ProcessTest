@@ -1,5 +1,6 @@
 #include "processtest.h"
 
+#include <QCoreApplication>
 #include <QDebug>
 #include <QElapsedTimer>
 #include <QFileInfo>
@@ -45,6 +46,7 @@ void ProcessTest::start() {
             // "/ 3." - 3 части ожидания
             emit progress(int((double(i) + elapsed / 3. / waitProcess) * 1000 /_data.size()));
             if (p.waitForStarted(470)) { isDone = true; break; }
+            QCoreApplication::processEvents();
             elapsed = wait.elapsed();
         }
         if (_stop) {
@@ -66,6 +68,7 @@ void ProcessTest::start() {
             while (!_stop && elapsed < waitProcess) {
                 emit progress(int((double(i) + 1./3 + elapsed / 3. / waitProcess) * 1000 /_data.size()));
                 if (p.waitForBytesWritten(470)) { isDone = true; break; }
+                QCoreApplication::processEvents();
                 elapsed = wait.elapsed();
             }
             if (_stop) {
@@ -86,6 +89,7 @@ void ProcessTest::start() {
             while (!_stop && elapsed < waitProcess) {
                 emit progress(int((double(i) + 2./3 + elapsed / 3. / waitProcess) * 1000 /_data.size()));
                 if (p.waitForReadyRead(470)) { isDone = true; break; }
+                QCoreApplication::processEvents();
                 elapsed = wait.elapsed();
             }
             if (_stop) {
@@ -146,10 +150,3 @@ void ProcessTest::stop()
 {
     _stop = true;
 }
-
-//void ProcessTest::goToFinish(int ind, QProcess &p, QString msg)
-//{
-//    p.close();
-//    emit emitMsg(QString("%1: %2").arg(ind + 1).arg(msg));
-//    emit finished(_data);
-//}

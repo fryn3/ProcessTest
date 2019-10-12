@@ -1,0 +1,3 @@
+[submodule "ProcessTestBin"]
+	path = ProcessTestBin
+	url = https://github.com/fryn3/ProcessTestBin.git
